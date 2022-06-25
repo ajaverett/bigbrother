@@ -112,11 +112,22 @@ class FakePerson():
             # else: df.loc[len(df.index)] = data
         # return df
 
+def add_email(people):
+    people[["f","l"]] = (people["name"].str.split(" ", expand=True))
+    people["f"] = people["f"].str.slice(0,1)
+    people["email"] = ((people["f"] + people["l"] + "@byui.edu")
+    .str.lower()
+    .drop(columns = ["f","l"]))
+    return people
+
+
+
 cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
 fakeperson = FakePerson(Database(cluster))
 
 # Run this function ONCE upon database creation
 fakeperson.create_person(50)
+
 
 # Data I don't think will be useful for our purpose
 # fake.country()
