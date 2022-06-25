@@ -1,5 +1,7 @@
 from faker import Faker
+from database import Database
 import random
+from pymongo import MongoClient
 import pandas as pd
 import numpy as np
 
@@ -11,8 +13,8 @@ fake = Faker()
 
 class FakePerson():
 
-    def __init__(self):
-        pass
+    def __init__(self, database):
+        self.database = database
 
     def _generate_social_credit_score(self, avg=800): return np.random.normal(avg, 75, 1).round(0)
 
@@ -65,9 +67,24 @@ class FakePerson():
 
     def _generate_fake_age(self): return random.randrange(38, 74)
 
+    def _generate_worker_id(self):
+        cap_letters = [chr(i) for i in range(65, 91)]
+        low_letters = [chr(i) for i in range(97, 123)]
+        numbers = [i for i in range(10)]
+
+        worker_id = ''
+
+        for i in range(7):
+            choice = random.choice([cap_letters, low_letters, numbers])
+            worker_id += random.choice(choice)
+
+        return worker_id
+
     def create_person(self, amount = 1):
+        collection = self.database.return_database('People')
         for i in range(amount):
             # Generating all the important information for a "person"
+            worker_id = _generate_worker_id()
             scs = self._generate_social_credit_score()
             iq = self._generate_fake_IQ()
             address = self._generate_fake_address()
@@ -84,20 +101,23 @@ class FakePerson():
             current_longitude = fake.longitude()
             license_plate = fake.license_plate()
             fake.time()
-            data = {'name': name, 'address': address, 'ssn': ssn, 'age': age, 'email': email, 'phone_number': phone_number, \
+            data = {'_id': worker_id, 'name': name, 'address': address, 'ssn': ssn, 'age': age, 'email': email, 'phone_number': phone_number, \
                            'salary': salary, 'birth_date': birth_date, 'iq': iq, 'social_credit_score': scs, 'hire_month': hire_month, \
                            'hire_year': hire_year, 'current_latitude': current_latitude, 'current_longitude': current_longitude, \
                            'license_plate': license_plate}
+            collection.insert_one(data)
             
-            # Creating or adding person to the pandas dataframe
-            if i == 0: df = pd.DataFrame(data)
-            else: df.loc[len(df.index)] = data
-        return df
+            # # Creating or adding person to the pandas dataframe
+            # if i == 0: df = pd.DataFrame(data)
+            # else: df.loc[len(df.index)] = data
+        # return df
 
-fakeperson = FakePerson()
-people = fakeperson.create_person(50)
-print(people)
+cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
+fakeperson = FakePerson(Database(cluster))
+
+# Run this function ONCE upon database creation
+fakeperson.create_person(50)
 
 # Data I don't think will be useful for our purpose
-fake.country()
-fake.job()
+# fake.country()
+# fake.job()
