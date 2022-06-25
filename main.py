@@ -1,5 +1,6 @@
 from faker import Faker
 import random
+import pandas as pd
 import numpy as np
 
 fake = Faker()
@@ -67,8 +68,7 @@ class FakePerson():
     def _generate_fake_age(self): return random.randrange(38, 74)
 
     def create_person(self, amount = 1):
-        people = []
-        for _ in range(amount):
+        for i in range(amount):
             # Generating all the important information for a "person"
             scs = self._generate_social_credit_score()
             iq = self._generate_fake_IQ()
@@ -86,14 +86,19 @@ class FakePerson():
             current_longitude = fake.longitude()
             license_plate = fake.license_plate()
             fake.time()
-            people.append({'name': name, 'address': address, 'ssn': ssn, 'age': age, 'email': email, 'phone_number': phone_number, \
+            data = {'name': name, 'address': address, 'ssn': ssn, 'age': age, 'email': email, 'phone_number': phone_number, \
                            'salary': salary, 'birth_date': birth_date, 'iq': iq, 'social_credit_score': scs, 'hire_month': hire_month, \
                            'hire_year': hire_year, 'current_latitude': current_latitude, 'current_longitude': current_longitude, \
-                           'license_plate': license_plate})
-        return people
+                           'license_plate': license_plate}
+            
+            # Creating or adding person to the pandas dataframe
+            if i == 0: df = pd.DataFrame(data)
+            else: df.loc[len(df.index)] = data 
+        return df
 
 fakeperson = FakePerson()
-people = fakeperson.create_person(5)
+people = fakeperson.create_person(500)
+print(people)
 
 # Data I don't think will be useful for our purpose
 fake.country()
