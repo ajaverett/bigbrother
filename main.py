@@ -16,9 +16,9 @@ class FakePerson():
     def __init__(self, database):
         self.database = database
 
-    def _generate_social_credit_score(self, avg=800): return np.random.normal(avg, 75, 1).round(0)
+    def _generate_social_credit_score(self): return random.randrange(725, 950)
 
-    def _generate_fake_IQ(self, avg = 100): return np.random.normal(avg, 15, 1).round(0)
+    def _generate_fake_IQ(self): return random.randrange(95, 130)
 
     def _generate_fake_address(self):
         address = fake.street_address()
@@ -63,14 +63,14 @@ class FakePerson():
         address += f" {city}, {state}. {zipcode}"    
         return address
 
-    def _generate_fake_salary(self): random.randrange(70000, 125000, 1000)
+    def _generate_fake_salary(self): return random.randrange(70000, 125000, 1000)
 
     def _generate_fake_age(self): return random.randrange(38, 74)
 
     def _generate_worker_id(self):
         cap_letters = [chr(i) for i in range(65, 91)]
         low_letters = [chr(i) for i in range(97, 123)]
-        numbers = [i for i in range(10)]
+        numbers = [str(i) for i in range(10)]
 
         worker_id = ''
 
@@ -80,55 +80,44 @@ class FakePerson():
 
         return worker_id
 
+    def _add_email(self, name):
+        name = name.split(' ')
+        fname = name[0]
+        lname = name[1]
+        email = (fname[0] + lname + "@byui.edu").lower()
+        return email
+
     def create_person(self, amount = 1):
         collection = self.database.return_database('People')
         for i in range(amount):
             # Generating all the important information for a "person"
-            worker_id = _generate_worker_id()
+            worker_id = self._generate_worker_id()
+            name = fake.name()
             scs = self._generate_social_credit_score()
             iq = self._generate_fake_IQ()
             address = self._generate_fake_address()
             salary = self._generate_fake_salary()
             age = self._generate_fake_age()
-            name = fake.name()
             phone_number = fake.phone_number()
             ssn = fake.ssn()
-            email = fake.email()
+            email = self._add_email(name)
             hire_month = fake.month()
             hire_year = fake.year()
             birth_date = fake.date()
-            current_latitude = fake.latitude()
-            current_longitude = fake.longitude()
+            current_latitude = float(fake.latitude())
+            current_longitude = float(fake.longitude())
             license_plate = fake.license_plate()
-            fake.time()
+            # fake.time()
             data = {'_id': worker_id, 'name': name, 'address': address, 'ssn': ssn, 'age': age, 'email': email, 'phone_number': phone_number, \
-                           'salary': salary, 'birth_date': birth_date, 'iq': iq, 'social_credit_score': scs, 'hire_month': hire_month, \
-                           'hire_year': hire_year, 'current_latitude': current_latitude, 'current_longitude': current_longitude, \
-                           'license_plate': license_plate}
+                    'salary': salary, 'birth_date': birth_date, 'iq': iq, 'social_credit_score': scs, 'hire_month': hire_month, \
+                    'hire_year': hire_year, 'current_latitude': current_latitude, 'current_longitude': current_longitude, \
+                    'license_plate': license_plate}
+
+            # UNCOMMENT IF DATABASE RESET REQUIRED
             collection.insert_one(data)
-            
-            # # Creating or adding person to the pandas dataframe
-            # if i == 0: df = pd.DataFrame(data)
-            # else: df.loc[len(df.index)] = data
-        # return df
-
-def add_email(people):
-    people[["f","l"]] = (people["name"].str.split(" ", expand=True))
-    people["f"] = people["f"].str.slice(0,1)
-    people["email"] = ((people["f"] + people["l"] + "@byui.edu")
-    .str.lower()
-    .drop(columns = ["f","l"]))
-    return people
-
-
 
 cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
 fakeperson = FakePerson(Database(cluster))
 
 # Run this function ONCE upon database creation
-fakeperson.create_person(50)
-
-
-# Data I don't think will be useful for our purpose
-# fake.country()
-# fake.job()
+fakeperson.create_person(420)
