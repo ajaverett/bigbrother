@@ -6,36 +6,68 @@ library(shiny)
 library(tidyverse)
 library(DT)
 
-df <- read_csv("people.csv",
-               #col_names = F,
-               )
+
+
+# ui <- fluidPage(
+#   titlePanel("Employee Explorer (this is fake data please do not report us)"),
+#       column(12,DTOutput('table'))
+# )
 
 ui <- fluidPage(
   titlePanel("Employee Explorer (this is fake data please do not report us)"),
-  
-  #fluidRow(
-    column(12,
-           DTOutput('table')
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("df.columns", "Select columns to display", names(df), multiple = TRUE),
+    ),
+    mainPanel(
+      column(12,DTOutput('table'))
     )
-  #)
+  )
 )
 
-# ui <- fluidPage(
-#   titlePanel("Employee Explorer"),
-#   sidebarLayout(
-#     sidebarPanel(textInput('name', 'Enter Name', 'David')),
-#     mainPanel(plotOutput('trend'))
-#   )
-# )
 
 server <- function(input, output) {
-    output$table <- renderDT(df,
+  
+  df <- read_csv("people.csv",
+                 #col_names = F,
+  )
+
+  
+  colname_vector <- c("worker_id","name","age","productivity")
+
+  observe(input$df.columns, {
+    
+    if (!is.null(input$df.columns)){
+      
+      colname_vector <- c("worker_id","name","age","productivity")
+      print("1a------")
+      print(input$df.columns)
+      print("2------")
+      print(colname_vector)
+      print("3------")
+      
+    } else {
+      
+      colname_vector <- (input$df.columns)
+    }
+  })
+  
+  
+  # temp()
+  
+    output$table <- renderDT(df |> select(colname_vector),
                              filter = "top",
                              options = list(
                                pageLength = 5
-                             )
-    )
-  }
+                             ))
+  
+  
+  
+  
+  
+}
+
+
 
 shinyApp(ui = ui, server = server)
 
