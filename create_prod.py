@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 # Transform People File
 people = (pd.read_csv('people.csv')
     .filter(['worker_id', 'productivity'])
@@ -10,3 +11,5 @@ people.columns = people.iloc[0,:]
 
 people.to_csv('prod.csv')
 
+
+# I need austin to remove the first line
