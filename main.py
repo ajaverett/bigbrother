@@ -60,9 +60,8 @@ class FakePerson():
             # print(random.choices(numberList, weights=(10, 20, 30, 40, 50), k=5))
             city = random.choice(cities)
             state = 'ID'
-
-        address += f" {city} {state}. {zipcode}"    
-        return address
+    
+        return city, state, zipcode
 
     def _generate_fake_salary(self): return random.randrange(70000, 125000, 1000)
 
@@ -99,7 +98,7 @@ class FakePerson():
                 name = fake.name()
                 scs = self._generate_social_credit_score()
                 iq = self._generate_fake_IQ()
-                address = self._generate_fake_address()
+                city, state, zipcode = self._generate_fake_address()
                 salary = self._generate_fake_salary()
                 age = self._generate_fake_age()
                 phone_number = fake.phone_number()
@@ -113,7 +112,7 @@ class FakePerson():
                 license_plate = fake.license_plate()
                 productivity = self._generate_fake_productivity_score()
                 # fake.time()
-                data = f"{worker_id},{name},{address},{ssn},{age},{email},{phone_number},{salary},{birth_date},{iq},{scs},{hire_month},{hire_year},{current_latitude},{current_longitude},{license_plate},{productivity}\n"
+                data = f"{worker_id},{name},{city},{state},{zipcode},{ssn},{age},{email},{phone_number},{salary},{birth_date},{iq},{scs},{hire_month},{hire_year},{current_latitude},{current_longitude},{license_plate},{productivity}\n"
                 # worker_id,name,address,ssn,age,email,phone_number,salary,birth_date,iq,scs,hire_month,hire_year,current_latitude,current_longitude,license_plate
                 file.writelines(data)
             # UNCOMMENT IF DATABASE RESET REQUIRED
