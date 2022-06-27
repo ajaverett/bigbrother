@@ -88,6 +88,8 @@ class FakePerson():
         email = (fname[0] + lname + "@byui.edu").lower()
         return email
 
+    def _generate_fake_productivity_score(self): return random.randrange(55, 100)
+
     def create_person(self, amount = 1):
         # collection = self.database.return_database('People')
         with open('people.csv', 'w') as file:
@@ -109,8 +111,10 @@ class FakePerson():
                 current_latitude = float(fake.latitude())
                 current_longitude = float(fake.longitude())
                 license_plate = fake.license_plate()
+                productivity = self._generate_fake_productivity_score()
                 # fake.time()
-                data = f"{worker_id},{name},{address},{ssn},{age},{email},{phone_number},{salary},{birth_date},{iq},{scs},{hire_month},{hire_year},{current_latitude},{current_longitude},{license_plate}\n"
+                data = f"{worker_id},{name},{address},{ssn},{age},{email},{phone_number},{salary},{birth_date},{iq},{scs},{hire_month},{hire_year},{current_latitude},{current_longitude},{license_plate},{productivity}\n"
+                # worker_id,name,address,ssn,age,email,phone_number,salary,birth_date,iq,scs,hire_month,hire_year,current_latitude,current_longitude,license_plate
                 file.writelines(data)
             # UNCOMMENT IF DATABASE RESET REQUIRED
             # collection.insert_one(data)
