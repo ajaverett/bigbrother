@@ -8,11 +8,5 @@ people = (pd.read_csv('people.csv')
 
 people.columns = people.iloc[0,:]
 
-people =(people
-    .drop(["worker_id"])
-    .reset_index()
-    .drop(columns = ['index'])
-)
-
-
 people.to_csv('prod.csv')
+
