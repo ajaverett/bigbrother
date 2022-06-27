@@ -13,8 +13,9 @@ fake = Faker()
 
 class FakePerson():
 
-    def __init__(self, database):
-        self.database = database
+    def __init__(self):
+        # self.database = database
+        pass
 
     def _generate_social_credit_score(self): return random.randrange(725, 950)
 
@@ -88,36 +89,35 @@ class FakePerson():
         return email
 
     def create_person(self, amount = 1):
-        collection = self.database.return_database('People')
-        for i in range(amount):
-            # Generating all the important information for a "person"
-            worker_id = self._generate_worker_id()
-            name = fake.name()
-            scs = self._generate_social_credit_score()
-            iq = self._generate_fake_IQ()
-            address = self._generate_fake_address()
-            salary = self._generate_fake_salary()
-            age = self._generate_fake_age()
-            phone_number = fake.phone_number()
-            ssn = fake.ssn()
-            email = self._add_email(name)
-            hire_month = fake.month()
-            hire_year = fake.year()
-            birth_date = fake.date()
-            current_latitude = float(fake.latitude())
-            current_longitude = float(fake.longitude())
-            license_plate = fake.license_plate()
-            # fake.time()
-            data = {'_id': worker_id, 'name': name, 'address': address, 'ssn': ssn, 'age': age, 'email': email, 'phone_number': phone_number, \
-                    'salary': salary, 'birth_date': birth_date, 'iq': iq, 'social_credit_score': scs, 'hire_month': hire_month, \
-                    'hire_year': hire_year, 'current_latitude': current_latitude, 'current_longitude': current_longitude, \
-                    'license_plate': license_plate}
-
+        # collection = self.database.return_database('People')
+        with open('people.csv', 'w') as file:
+            for i in range(amount):
+                # Generating all the important information for a "person"
+                worker_id = self._generate_worker_id()
+                name = fake.name()
+                scs = self._generate_social_credit_score()
+                iq = self._generate_fake_IQ()
+                address = self._generate_fake_address()
+                salary = self._generate_fake_salary()
+                age = self._generate_fake_age()
+                phone_number = fake.phone_number()
+                ssn = fake.ssn()
+                email = self._add_email(name)
+                hire_month = fake.month()
+                hire_year = fake.year()
+                birth_date = fake.date()
+                current_latitude = float(fake.latitude())
+                current_longitude = float(fake.longitude())
+                license_plate = fake.license_plate()
+                # fake.time()
+                data = f"{worker_id},{name},{address},{ssn},{age},{email},{phone_number},{salary},{birth_date},{iq},{scs},{hire_month},{hire_year},{current_latitude},{current_longitude},{license_plate}\n"
+                file.writelines(data)
             # UNCOMMENT IF DATABASE RESET REQUIRED
-            collection.insert_one(data)
+            # collection.insert_one(data)
 
-cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
-fakeperson = FakePerson(Database(cluster))
+
+# cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
+fakeperson = FakePerson()
 
 # Run this function ONCE upon database creation
 fakeperson.create_person(420)

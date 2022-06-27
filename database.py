@@ -9,9 +9,9 @@ class Database():
         dataCollection = people[name]
         return dataCollection
 
-# cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
-# people = cluster['TotallyLegalStuff']
-# dataCollection = people['People']
+cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
+people = cluster['TotallyLegalStuff']
+dataCollection = people['People']
 
 # person = {'name': 'John Smith', 'age': 69}
 # dataCollection.insert_one(person)
