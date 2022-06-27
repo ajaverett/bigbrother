@@ -1,17 +1,21 @@
-from pymongo import MongoClient
+from math import prod
+import pandas as pd
+import random
 
-# cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
-# data = cluster['TotallyLegalStuff']
+df = pd.read_csv('people.csv')
 
-# people = data['People'].find()
-# for person in people:
-#     print(person)
+print(df.head())
+productivity = df['productivity']
+# for i in range(len(productivity)):
 
-cluster = MongoClient("mongodb+srv://precious_butthead:sparky123592n600@cluster0.y0bo003.mongodb.net/?retryWrites=true&w=majority")
-people = cluster['TotallyLegalStuff']
-dataCollection = people['People']
-data = dataCollection.find()
+def add_num(x):
+    num = x + random.randrange(-5, 5)
+    if num < 0: num = 0
+    return num
 
-for person in data:
-    print(person)
-    break
+for i in range(len(productivity)): productivity[i] = add_num(int(productivity[i]))
+
+df.drop(columns='productivity')
+df.add(productivity)
+
+df.to_csv('people.csv', index=False)

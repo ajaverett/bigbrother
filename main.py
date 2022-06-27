@@ -61,7 +61,7 @@ class FakePerson():
             city = random.choice(cities)
             state = 'ID'
 
-        address += f" {city}, {state}. {zipcode}"    
+        address += f" {city} {state}. {zipcode}"    
         return address
 
     def _generate_fake_salary(self): return random.randrange(70000, 125000, 1000)
