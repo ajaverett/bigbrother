@@ -1,73 +1,61 @@
-# library(rsconnect)
-# rsconnect::deployApp('path/to/your/app')
-
-
 library(shiny)
+library(shinyWidgets)
 library(tidyverse)
-library(DT)
-
-
-
-# ui <- fluidPage(
-#   titlePanel("Employee Explorer (this is fake data please do not report us)"),
-#       column(12,DTOutput('table'))
-# )
 
 ui <- fluidPage(
-  titlePanel("Employee Explorer (this is fake data please do not report us)"),
+  
+  # Application title
+  titlePanel("Search Employee Database"),
+  h5("The Data in this report is fictitious, pls no report"),
+  
+  # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-      selectInput("df.columns", "Select columns to display", names(df), multiple = TRUE),
+      
+      uiOutput("picker"),
+      actionButton("view", "View Selection")
+      
     ),
+    
+    # Show a plot of the generated distribution
     mainPanel(
-      column(12,DTOutput('table'))
+      h2('Employee Explorer'),
+      DT::dataTableOutput("table"),
     )
   )
 )
 
+library(shiny)
+library(DT)
+library(tidyverse)
 
-server <- function(input, output) {
+server <- function(session, input, output) {
   
-  df <- read_csv("people.csv",
-                 #col_names = F,
-  )
-
-  
-  colname_vector <- c("worker_id","name","age","productivity")
-
-  observe(input$df.columns, {
-    
-    if (!is.null(input$df.columns)){
-      
-      colname_vector <- c("worker_id","name","age","productivity")
-      print("1a------")
-      print(input$df.columns)
-      print("2------")
-      print(colname_vector)
-      print("3------")
-      
-    } else {
-      
-      colname_vector <- (input$df.columns)
-    }
+  df <- read_csv("https://raw.githubusercontent.com/ajaverett/bigbrother/main/people.csv")
+  data <- reactive({
+    df
   })
   
+  output$picker <- renderUI({
+    pickerInput(inputId = 'pick', 
+                label = 'Choose', 
+                choices = colnames(data()),
+                options = list(`actions-box` = TRUE),multiple = T)
+  })
   
-  # temp()
+  datasetInput <- eventReactive(input$view,{
+    
+    datasetInput <- data() %>% 
+      select(input$pick)
+    
+    return(datasetInput)
+    
+  })
   
-    output$table <- renderDT(df |> select(colname_vector),
-                             filter = "top",
-                             options = list(
-                               pageLength = 5
-                             ))
-  
-  
-  
-  
-  
+  output$table <- renderDT({datasetInput()
+  })
 }
 
 
-
+# Run the application 
 shinyApp(ui = ui, server = server)
-
