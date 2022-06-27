@@ -24,20 +24,8 @@ def fire_person(df, id):
     df = df[df.worker_id != id]
     df.to_csv('people.csv', index=False)
 
-def calculate_age(birthday):
-    age = datetime.now() - datetime.strptime(birthday, '%Y-%m-%d')
-    age = str(age).split(' ')[0]
-    return int(round(int(age) // 365.25, 0))
-
-def update_birthday(df):
-    birthday = df['birth_date']
-    age = df['age']
-    for i in range(len(birthday)): age[i] = calculate_age(birthday[i])
-    df.drop(columns='age')
-    df.add(age)
-    df.to_csv('people.csv', index=False)
-
 def make_birthday(df):
+    # Creates birthday and age
     birth = df['birth_date']
     old = df['age']
 
@@ -59,6 +47,7 @@ def make_birthday(df):
     df.to_csv('people.csv', index=False)
 
 def hire_year(df):
+    # Creates years an employee was hired
     hire_year = df['hire_year']
     age = df['age']
 
@@ -78,6 +67,28 @@ def hire_year(df):
     df.add(hire_year)
     df.to_csv('people.csv', index=False)
 
-# update_birthday(df)
-# make_birthday(df)
-hire_year(df)
+def send_blackmail(email):
+    emails = []
+    with open('blackmail.txt', 'r') as file:
+        for i in file: emails.append(i)
+    print(f'{email} has been sent the following encouraging e-mail: {random.choice(emails)}!')
+
+def determine_blackmail(df):
+    emails = df['email']
+    productivity = df['productivity']
+
+    for i in range(len(productivity)):
+        if int(productivity[i]) < 50: send_blackmail(emails[i])
+
+
+# determine_blackmail(df)
+        
+lines = []
+with open('prod.csv', 'r+') as file:
+    count = 0
+    for i in file:
+        if count != 0: lines += i
+        count += 1
+
+with open('prod.csv', 'w+') as file:
+    for line in lines: file.writelines(line)
