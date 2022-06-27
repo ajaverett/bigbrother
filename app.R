@@ -1,13 +1,17 @@
+# library(rsconnect)
+# rsconnect::deployApp('path/to/your/app')
+
 
 library(shiny)
 library(tidyverse)
+library(DT)
 
 df <- read_csv("people.csv",
                #col_names = F,
                )
 
 ui <- fluidPage(
-  titlePanel("Employee Explorer"),
+  titlePanel("Employee Explorer (this is fake data please do not report us)"),
   
   #fluidRow(
     column(12,
