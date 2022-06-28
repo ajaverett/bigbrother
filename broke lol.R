@@ -14,12 +14,26 @@ ui <- fluidPage(
       
       uiOutput("picker"),
       actionButton("view", "View Selection"),
-      textInput('name', 'Enter Employee ID', "VAuq292")
+      p('___'),
+      textInput('name', 'Enter Employee ID', "VAuq292"),
+      p('___'),
+      h4('Worst Employees Today'),
+      tableOutput("worst_table"),
+      p('___'),
+      textAreaInput('email',
+                "Insert email text",
+                "This is a warning...", rows = 5),
+      actionButton("button",
+                   "Send warning to worst employees today by email",
+                   ),
       
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
+      actionButton("runfile",
+                   "Add day to data",
+                   ),
       h2('Employee Explorer'),
       h4("Productivity Over Time"),
       plotOutput('trend'),
@@ -68,7 +82,28 @@ server <- function(session, input, output) {
       theme_classic() +
       labs(x = "Recorded days",
            y = 'Productivity Score')
-    
+  })
+  
+  output$worst_table <- renderTable({
+    read_csv("https://raw.githubusercontent.com/ajaverett/bigbrother/main/prod.csv") |> 
+      tail(1) |> 
+      mutate(row = row_number()) |> 
+      pivot_longer(cols = !row,  names_to = "worker_id", values_to = "productivity") |> 
+      arrange(productivity) |> 
+      head(10) |> 
+      left_join(
+        (read_csv("https://raw.githubusercontent.com/ajaverett/bigbrother/main/people.csv") |> select(worker_id, name))
+      ) |> select(-row)
+  })
+  
+  observeEvent(input$button, {
+    session$sendCustomMessage(type = 'testmessage',
+                              message = 'Thank you for clicking')
+  })
+  
+  
+  observeEvent(input$runfile, {
+    reticulate::py_run_file("update_prod.py")
   })
   
 }
