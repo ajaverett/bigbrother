@@ -17,12 +17,11 @@ async def update_productivity(lock):
         lock.acquire()
         df = pd.read_csv('people.csv')
         print('Updating Productivity')
-        '''
         productivity = df['productivity']
         for i in range(len(productivity)): productivity[i] = add_num(int(productivity[i]))
         df.drop(columns='productivity')
         df.add(productivity)
-        df.to_csv('people.csv', index=False)'''
+        df.to_csv('people.csv', index=False)
         determine_fire(df)
         lock.release()
 
@@ -33,7 +32,6 @@ def fire_person(df, id):
 
 def determine_fire(df):
     print('Firing Unproductive Employees')
-    '''
     productivity = df['productivity']
     worker_ids = df['worker_id']
     for i in range(len(productivity)):
@@ -46,7 +44,7 @@ def determine_fire(df):
         elif 15 < productivity[i] and productivity[i] <= 20:
             # 5% chance of being fired
             chance = random.random()
-            if chance < .05: fire_person(df, worker_ids[i])'''
+            if chance < .05: fire_person(df, worker_ids[i])
 
 def send_blackmail(email):
     emails = []
@@ -60,12 +58,11 @@ async def determine_blackmail(lock):
         lock.acquire()
         df = pd.read_csv('people.csv')
         print('Sending Blackmail to Incompetent Employees')
-        '''
         emails = df['email']
         productivity = df['productivity']
 
         for i in range(len(productivity)):
-            if 10 < int(productivity[i]) and int(productivity[i]) <= 20: send_blackmail(emails[i])'''
+            if 10 < int(productivity[i]) and int(productivity[i]) <= 20: send_blackmail(emails[i])
         lock.release()
 
 def run_blackmail(lock):
