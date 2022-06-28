@@ -5,7 +5,7 @@ def fire_person(people, prod, id):
     people = people[people.worker_id != id]
     people.to_csv('people.csv', index=False)
 
-    prod.drop(columns=['68Ip281'])
+    prod.drop(columns=[id])
     prod.to_csv('prod.csv', index=False)
 
 def determine_fire():
