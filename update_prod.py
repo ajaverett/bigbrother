@@ -2,7 +2,7 @@ import pandas as pd
 import random as rd
 
 # Update Productivity
-df = pd.read_csv("prod.csv").drop(columns = ['worker_id'])
+df = pd.read_csv("prod.csv")#.drop(columns = ['worker_id'])
 
 def update_prod(df):
     last_prod = df.iloc[-1,:].values.tolist()
