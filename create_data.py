@@ -1,5 +1,5 @@
 from faker import Faker
-from database import Database
+from archive.database import Database
 import random
 from pymongo import MongoClient
 import pandas as pd

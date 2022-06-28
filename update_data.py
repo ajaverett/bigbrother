@@ -8,10 +8,10 @@ def send_blackmail(email):
     print(f'{email} has been sent the following encouraging e-mail: {random.choice(emails)}!')
 
 def determine_blackmail():
-    df = pd.read_csv('people.csv')
-    print('Sending Blackmail to Incompetent Employees')
-    emails = df['email']
-    productivity = df['productivity']
+    temp = pd.read_csv('people.csv')
+    emails = temp['email']
+    df = pd.read_csv('prod.csv')
+    productivity = list(df.iloc[len(df) - 1])
 
     for i in range(len(productivity)):
         if 10 < int(productivity[i]) and int(productivity[i]) <= 20: send_blackmail(emails[i])
@@ -35,5 +35,7 @@ def update_productivity():
     df.loc[df_length] = new_prod
     df.to_csv("prod.csv", index = False)
 
+    # Sends blackmail to people after productivity is updated
     determine_blackmail()
+
 update_productivity()
