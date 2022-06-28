@@ -8,12 +8,12 @@ def fire_person(people, prod, id):
     prod.drop(columns=['68Ip281'])
     prod.to_csv('prod.csv', index=False)
 
-def determine_fire(df):
+def determine_fire():
 
     people = pd.read_csv('people.csv')
     prod = pd.read_csv('prod.csv')
     
-    productivity = list(df.iloc[len(prod) - 1])
+    productivity = list(prod.iloc[len(prod) - 1])
     worker_ids = people['worker_id']
 
     for i in range(len(productivity)):
