@@ -1,4 +1,3 @@
-from math import prod
 import pandas as pd
 
 def fire_person(people, prod, id):
@@ -18,8 +17,6 @@ def determine_fire():
     worker_ids = people['worker_id']
 
     for i in range(len(productivity)):
-        if productivity[i] <= 10:
-            # print(worker_ids[i])
-            fire_person(people, prod, worker_ids[i])
+        if productivity[i] <= 10: fire_person(people, prod, worker_ids[i])
 
 determine_fire()
