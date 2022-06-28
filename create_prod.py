@@ -9,7 +9,13 @@ people = (pd.read_csv('people.csv')
 
 people.columns = people.iloc[0,:]
 
-people.to_csv('prod.csv')
+     
+lines = []
+with open('prod.csv', 'r+') as file:
+    count = 0
+    for i in file:
+        if count != 0: lines += i
+        count += 1
 
-
-# I need austin to remove the first line
+with open('prod.csv', 'w+') as file:
+    for line in lines: file.writelines(line)

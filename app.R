@@ -13,13 +13,17 @@ ui <- fluidPage(
     sidebarPanel(
       
       uiOutput("picker"),
-      actionButton("view", "View Selection")
+      actionButton("view", "View Selection"),
+      textInput('name', 'Enter Employee ID', "VAuq292")
       
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
       h2('Employee Explorer'),
+      h4("Productivity Over Time"),
+      plotOutput('trend'),
+      h4("Employee Database"),
       DT::dataTableOutput("table"),
     )
   )
@@ -38,7 +42,7 @@ server <- function(session, input, output) {
   
   output$picker <- renderUI({
     pickerInput(inputId = 'pick', 
-                label = 'Choose', 
+                label = 'Choose columns for employee database', 
                 choices = colnames(data()),
                 options = list(`actions-box` = TRUE),multiple = T)
   })
@@ -54,6 +58,16 @@ server <- function(session, input, output) {
   
   output$table <- renderDT({datasetInput()
   })
+  
+  output$trend <- renderPlot({
+    # CODE BELOW: Update to display a line plot of the input name
+    
+    read_csv("https://raw.githubusercontent.com/ajaverett/bigbrother/main/prod.csv") %>% select(input$name) %>% mutate(count = .[[1]], index = row_number()) %>% 
+      ggplot(aes(x = index, y = count)) +
+      geom_line(size = 2) + theme_classic()
+    
+  })
+  
 }
 
 
