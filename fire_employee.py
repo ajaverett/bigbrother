@@ -18,3 +18,5 @@ def determine_fire(df):
 
     for i in range(len(productivity)):
         if productivity[i] <= 10: fire_person(people, prod, worker_ids[i])
+
+determine_fire()
