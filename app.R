@@ -22,7 +22,7 @@ ui <- fluidPage(
       textAreaInput('email',
                     "Insert email text",
                     "This is a warning...", rows = 5),
-      actionButton("button",
+      actionButton("fire",
                    "Fire incompetent employees!",
       ),
       
@@ -98,14 +98,13 @@ server <- function(session, input, output) {
   })
   })
   
-  observeEvent(input$button, {
-    session$sendCustomMessage(type = 'testmessage',
-                              message = 'Thank you for clicking')
+  observeEvent(input$fire, {
+    reticulate::py_run_file("fire_employee.py")
   })
   
   
   observeEvent(input$runfile, {
-    reticulate::py_run_file("update_prod.py")
+    reticulate::py_run_file("update_data.py")
     # reticulate::py_run_file("automation.py")
   })
   
