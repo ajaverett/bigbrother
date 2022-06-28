@@ -64,7 +64,10 @@ server <- function(session, input, output) {
     
     read_csv("https://raw.githubusercontent.com/ajaverett/bigbrother/main/prod.csv") %>% select(input$name) %>% mutate(count = .[[1]], index = row_number()) %>% 
       ggplot(aes(x = index, y = count)) +
-      geom_line(size = 2) + theme_classic()
+      geom_line(size = 2) +
+      theme_classic() +
+      labs(x = "Recorded days",
+           y = 'Productivity Score')
     
   })
   
