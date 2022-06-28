@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyWidgets)
 library(tidyverse)
+library(plotly)
 
 ui <- fluidPage(
   
@@ -22,7 +23,7 @@ ui <- fluidPage(
                     "Insert email text",
                     "This is a warning...", rows = 5),
       actionButton("button",
-                   "Send warning to worst employees today by email",
+                   "Fire incompetent employees!",
       ),
       
     ),
@@ -105,6 +106,7 @@ server <- function(session, input, output) {
   
   observeEvent(input$runfile, {
     reticulate::py_run_file("update_prod.py")
+    # reticulate::py_run_file("automation.py")
   })
   
 }

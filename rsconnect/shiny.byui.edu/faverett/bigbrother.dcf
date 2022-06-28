@@ -5,9 +5,10 @@ account: faverett
 server: shiny.byui.edu
 hostUrl: https://shiny.byui.edu/__api__
 appId: 1828
-bundleId: 3732
+bundleId: 3733
 url: https://shiny.byui.edu/content/18e256e2-565f-4331-aca5-fbd3ab49bdda/
-when: 1656428537.9408
-lastSyncTime: 1656428537.9408
+when: 1656438187.17264
+lastSyncTime: 1656438187.17264
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: automation.py|blackmail.txt|broke lol.R|create_data.py|create_prod.py|README.md|test.py|thingstodo
