@@ -1,3 +1,4 @@
+from math import prod
 import pandas as pd
 
 def fire_person(people, prod, id):
@@ -5,7 +6,7 @@ def fire_person(people, prod, id):
     people = people[people.worker_id != id]
     people.to_csv('people.csv', index=False)
 
-    prod.drop(columns=[id])
+    prod = prod.drop(columns=[id])
     prod.to_csv('prod.csv', index=False)
 
 def determine_fire():
@@ -17,6 +18,8 @@ def determine_fire():
     worker_ids = people['worker_id']
 
     for i in range(len(productivity)):
-        if productivity[i] <= 10: fire_person(people, prod, worker_ids[i])
+        if productivity[i] <= 10:
+            # print(worker_ids[i])
+            fire_person(people, prod, worker_ids[i])
 
 determine_fire()
